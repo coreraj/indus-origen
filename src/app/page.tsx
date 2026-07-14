@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -85,6 +86,67 @@ const reviews = [
   },
 ];
 
+const heroLines = [
+  {
+    outline: "The snack mix",
+    filled: "that",
+  },
+  {
+    filled: "makes other snacks",
+  },
+  {
+    filled: "insecure",
+  },
+];
+
+function HeadingWord({ word }: { word: string }) {
+  return (
+    <span className={styles.word} data-title-word aria-hidden="true">
+      {word.split("").map((char, index) => (
+        <span className={styles.char} data-title-char aria-hidden="true" key={`${char}-${index}`}>
+          {char}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function HeadingPhrase({ phrase }: { phrase: string }) {
+  return (
+    <>
+      {phrase.split(" ").map((word, index) => (
+        <span className={styles.wordWrap} key={`${word}-${index}`}>
+          <HeadingWord word={word} />
+          {index < phrase.split(" ").length - 1 ? " " : null}
+        </span>
+      ))}
+    </>
+  );
+}
+
+function HeroHeading() {
+  return (
+    <h1
+      data-title="true"
+      data-gsap-title="data-gsap-title"
+      aria-label="The snack mix that makes other snacks insecure"
+    >
+      {heroLines.map((line, index) => (
+        <span className={styles.line} data-hero-line aria-hidden="true" key={index}>
+          {line.outline ? (
+            <>
+              <strong className={styles.outlinePhrase}>
+                <HeadingPhrase phrase={line.outline} />
+              </strong>{" "}
+            </>
+          ) : null}
+          <HeadingPhrase phrase={line.filled} />
+        </span>
+      ))}
+    </h1>
+  );
+}
+
 function BrandMark() {
   return (
     <div className={styles.brandMark} aria-hidden="true">
@@ -119,9 +181,61 @@ function SnackPack({
   );
 }
 
+function BottleProduct({ product }: { product: (typeof products)[number] }) {
+  return (
+    <div className={styles.bottleWrap} data-float>
+      <Image
+        src="/assets/bucks-bottle.png"
+        alt={product.name}
+        width={405}
+        height={1058}
+        priority
+        className={styles.bottleImage}
+      />
+    </div>
+  );
+}
+
+function NutCharacter({ expression }: { expression: number }) {
+  return (
+    <div
+      className={`${styles.foodCharacter} ${styles[`face${expression}`]}`}
+      data-float
+      aria-hidden="true"
+    >
+      <Image
+        src="/assets/almond.png"
+        alt=""
+        width={514}
+        height={490}
+        className={styles.characterNutImage}
+      />
+      <div className={styles.smartGlasses}>
+        <span />
+        <span />
+        <i />
+      </div>
+      <div className={styles.foodRidgeOne} />
+      <div className={styles.foodRidgeTwo} />
+      <div className={styles.eyeLeft}>
+        <span />
+      </div>
+      <div className={styles.eyeRight}>
+        <span />
+      </div>
+      <div className={styles.browLeft} />
+      <div className={styles.browRight} />
+      <div className={styles.mouth} />
+      <div className={styles.cheekLeft} />
+      <div className={styles.cheekRight} />
+    </div>
+  );
+}
+
 export default function Home() {
   const rootRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [faceIndex, setFaceIndex] = useState(0);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -129,11 +243,30 @@ export default function Home() {
 
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-line]", {
-        yPercent: 105,
+        yPercent: 18,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power4.out",
+      });
+
+      gsap.from("[data-title-word]", {
+        yPercent: 85,
         opacity: 0,
         duration: 0.95,
-        stagger: 0.08,
+        stagger: 0.045,
         ease: "power4.out",
+        delay: 0.12,
+      });
+
+      gsap.from("[data-title-char]", {
+        yPercent: 32,
+        rotate: () => gsap.utils.random(-3, 3),
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.008,
+        ease: "power3.out",
+        delay: 0.18,
       });
 
       gsap.from("[data-hero-pack]", {
@@ -191,7 +324,15 @@ export default function Home() {
     return () => ctx.revert();
   }, []);
 
-  const featured = products[4];
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setFaceIndex((index) => (index + 1) % 3);
+    }, 1450);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const featured = products[1];
 
   return (
     <main ref={rootRef} className={styles.page}>
@@ -250,16 +391,15 @@ export default function Home() {
 
       <section id="top" className={styles.hero}>
         <div className={styles.heroTitle}>
-          <h1 aria-label="The snacks that make other snacks insecure">
-            <span data-hero-line>The snacks</span>
-            <span data-hero-line>that make</span>
-            <span data-hero-line>other snacks</span>
-            <span data-hero-line>insecure</span>
-          </h1>
+          <HeroHeading />
         </div>
 
         <div className={styles.heroProduct} data-hero-pack>
-          <div className={styles.productMetaLeft}>Product No. 01</div>
+          <div className={styles.heroAntlers} aria-hidden="true">
+            <span />
+            <span />
+          </div>
+          <div className={styles.productMetaLeft}>Product No. {featured.no}</div>
           <div className={styles.productMetaRight}>{featured.name}</div>
           <button className={styles.roundArrow} aria-label="Previous product">
             <ArrowLeft size={28} />
@@ -268,9 +408,24 @@ export default function Home() {
             <ArrowRight size={28} />
           </button>
           <div className={styles.heroBlob} />
-          <div className={styles.floatingSnackOne} data-float />
-          <div className={styles.floatingSnackTwo} data-float />
-          <SnackPack product={featured} size="hero" />
+          <div className={styles.nutCluster} data-float>
+            <Image
+              src="/assets/peanuts.png"
+              alt=""
+              width={550}
+              height={411}
+              className={styles.peanutImage}
+            />
+            <Image
+              src="/assets/almond.png"
+              alt=""
+              width={514}
+              height={490}
+              className={styles.almondImage}
+            />
+          </div>
+          <BottleProduct product={featured} />
+          <NutCharacter expression={faceIndex} />
           <a className={styles.shopNow} href="#shop">
             Shop now
           </a>
