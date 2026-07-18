@@ -3,17 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Camera, Menu, ShoppingBasket, ThumbsUp, X } from "lucide-react";
+import BrandLogo from "../BrandLogo";
 import styles from "./page.module.css";
-
-function BrandMark() {
-  return (
-    <div className={styles.brandMark} aria-hidden="true">
-      <span>Indus</span>
-      <strong>Origen</strong>
-      <i />
-    </div>
-  );
-}
 
 export default function HomeOneHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,7 +23,7 @@ export default function HomeOneHeader() {
     <>
       <header className={`${styles.topbar} ${headerCompact ? styles.headerCompact : ""}`}>
         <a className={styles.logoLink} href="#top" aria-label="Indus Origen home">
-          <BrandMark />
+          <BrandLogo className={styles.brandMark} compact={headerCompact} decorative priority />
         </a>
         <nav className={styles.navLinks} aria-label="Primary navigation">
           <a href="#shop">Shop</a>

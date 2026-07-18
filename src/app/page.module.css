@@ -46,55 +46,16 @@
 }
 
 .brandMark {
-  position: relative;
-  display: grid;
-  width: 126px;
-  min-height: 118px;
-  place-items: center;
-  color: var(--cream);
-  text-align: center;
-  text-transform: uppercase;
+  display: block;
+  width: 96px;
+  aspect-ratio: 1051 / 1497;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.34));
 }
 
-.brandMark::before,
-.brandMark::after {
-  position: absolute;
-  top: 40px;
-  width: 54px;
-  height: 26px;
-  border-top: 3px solid var(--cream);
-  border-radius: 50%;
-  content: "";
-}
-
-.brandMark::before {
-  left: 0;
-  transform: rotate(-26deg);
-}
-
-.brandMark::after {
-  right: 0;
-  transform: rotate(26deg);
-}
-
-.brandMark span {
-  font-size: 1.45rem;
-  font-weight: 950;
-  line-height: 0.8;
-}
-
-.brandMark strong {
-  margin-top: -42px;
-  font-size: 0.8rem;
-  line-height: 1;
-}
-
-.brandMark i {
-  width: 52px;
-  height: 38px;
-  margin-top: -34px;
-  border: 3px solid var(--cream);
-  border-radius: 40% 40% 58% 58%;
+.headerCompact .brandMark {
+  width: 63px;
+  height: 57px;
+  aspect-ratio: auto;
 }
 
 .navLinks {
@@ -556,10 +517,18 @@
   display: grid;
   width: 48px;
   height: 48px;
+  overflow: hidden;
   place-items: center;
   border: 2px solid currentColor;
   border-radius: 999px;
+  background: var(--black);
   font-weight: 950;
+}
+
+.packSealLogo {
+  display: block;
+  width: 34px;
+  aspect-ratio: 1051 / 1497;
 }
 
 .packBody {
@@ -591,6 +560,10 @@
   width: 26px;
   height: 26px;
   font-size: 0.6rem;
+}
+
+.small .packSealLogo {
+  width: 19px;
 }
 
 .small .packBody {
@@ -1549,6 +1522,10 @@
   place-items: center;
 }
 
+.footerBrand .brandMark {
+  width: 148px;
+}
+
 .footerNav {
   display: grid;
 }
@@ -1673,17 +1650,12 @@
   }
 
   .brandMark {
-    width: 86px;
-    min-height: 82px;
+    width: 70px;
   }
 
-  .brandMark span {
-    font-size: 1rem;
-  }
-
-  .brandMark strong,
-  .brandMark i {
-    display: none;
+  .headerCompact .brandMark {
+    width: 63px;
+    height: 57px;
   }
 
   .cornerActions {
@@ -1821,5 +1793,9 @@
 
   .footerBrand {
     min-height: 170px;
+  }
+
+  .footerBrand .brandMark {
+    width: 116px;
   }
 }

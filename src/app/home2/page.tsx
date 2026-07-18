@@ -13,6 +13,8 @@ import AnimatedStatement from "./AnimatedStatement";
 import HeroFoodParallax from "./HeroFoodParallax";
 import PressCarousel from "./PressCarousel";
 import HomeOneHeader from "./HomeOneHeader";
+import StoryFoodLoop from "./StoryFoodLoop";
+import BrandLogo from "../BrandLogo";
 import {
   ArrowRight,
   Droplet,
@@ -152,14 +154,14 @@ export default function HomeTwo() {
       <section id="top" className={styles.hero} data-hero-section>
         <HeroFoodParallax />
         <div className={styles.heroFoods} aria-hidden="true">
-          <div className={`${styles.heroFood} ${styles.heroFoodPineapple}`} data-hero-food data-parallax-range="64">
-            <Image src="/assets/pineapple-2.webp" alt="" width={375} height={431} />
+          <div className={`${styles.heroFood} ${styles.heroFoodKaju}`} data-hero-food data-parallax-range="64">
+            <Image src="/assets/statement-cashew.png" alt="" width={1280} height={1280} priority />
           </div>
-          <div className={`${styles.heroFood} ${styles.heroFoodOnion}`} data-hero-food data-parallax-range="92">
-            <Image src="/assets/onion.webp" alt="" width={375} height={318} />
+          <div className={`${styles.heroFood} ${styles.heroFoodAlmond}`} data-hero-food data-parallax-range="92">
+            <Image src="/assets/almond.png" alt="" width={522} height={420} priority />
           </div>
-          <div className={`${styles.heroFood} ${styles.heroFoodHabanero}`} data-hero-food data-parallax-range="86">
-            <Image src="/assets/habanero.webp" alt="" width={375} height={446} />
+          <div className={`${styles.heroFood} ${styles.heroFoodWalnut}`} data-hero-food data-parallax-range="86">
+            <Image src="/assets/statement-walnut.png" alt="" width={1280} height={1280} priority />
           </div>
         </div>
         <div className={styles.heroContent}>
@@ -168,26 +170,30 @@ export default function HomeTwo() {
           </span>
           <h1 className={styles.heroTitle}>
             <span className={styles.heroTitleMobile}>
-              Sauce made{" "}
+              The New{" "}
               <span className={styles.heroKaju}>
                 <KajuIcon />
               </span>{" "}
-              from real ingredients
+              Face of Indian Gourmet
             </span>
             <span className={styles.heroTitleDesktop}>
               <span className={styles.heroTitleRow}>
-                <SplitWords text="Sauce made" />
+                <SplitWords text="The New" />
                 <span className={styles.heroKaju} aria-hidden="true">
                   <KajuIcon />
                 </span>
-                <SplitWords text="from" startIndex={2} />
+                <SplitWords text="Face of" startIndex={2} />
               </span>
-              <SplitWords text="real ingredients" startIndex={3} />
+              <SplitWords text="Indian Gourmet" startIndex={4} />
             </span>
           </h1>
           <p className={styles.heroDescription}>
-            This is where you stop talking about sauce and actually get some.
+            Luxury gourmet foods inspired by India&apos;s rich culinary heritage and thoughtfully
+            designed for modern lifestyles.
           </p>
+          <a className={styles.heroCta} href="#shop">
+            Explore Collection - Button
+          </a>
         </div>
       </section>
 
@@ -242,8 +248,12 @@ export default function HomeTwo() {
           <BurstBackground />
           <div className={styles.actionText}>
             <TwoElephants className={styles.chefEmblem} />
-            <span>Meet the chef in</span>
-            <strong>Action</strong>
+            <span className={styles.actionKicker}>
+              <SplitWords text="Meet the chef in" />
+            </span>
+            <strong className={styles.actionTitle}>
+              <SplitWords text="Indus Origin" startIndex={14} />
+            </strong>
           </div>
         </RevealOnView>
         <RevealOnView delayMs={150}>
@@ -270,6 +280,7 @@ export default function HomeTwo() {
         </RevealOnView>
         <RevealOnView delayMs={300}>
           <div className={styles.storyStatement}>
+            <StoryFoodLoop />
             <HeartBadge />
             <AnimatedStatement text="Every bottle of Bucks Sauce is made with real ingredients, big attitude, and zero patience for bland food." />
             <button type="button">How it started</button>
@@ -386,7 +397,7 @@ export default function HomeTwo() {
 
       <footer className={styles.footer}>
         <div className={styles.footerBrand}>
-          <strong>IO</strong>
+          <BrandLogo className={styles.footerLogo} />
           <div className={styles.footerSignup}>
             <h3>
               <Megaphone size={25} />

@@ -8,27 +8,30 @@ import styles from "./page.module.css";
 
 const packs = [
   {
-    name: "Crushed Pineapple Sriracha",
+    id: "everyday",
+    name: "Everyday Collection",
     tone: "toneGold" as const,
-    bg: "#be8d40",
-    image: "/assets/buypack-pineapple-sriracha.avif",
-    packImage: "/assets/aaY4j1xvIZEnjQSL_3-pack-3-.png",
+    bg: "#064d92",
+    image: "/assets/buy-pack-left-almond-blue.png",
+    packImage: "/assets/bundle-collection-pack.png",
     cover: true,
   },
   {
-    name: "Crushed Habanero Garlic",
+    id: "gift-walnut",
+    name: "Gift Collection",
     tone: "toneOrange" as const,
-    bg: "#f15825",
-    image: "/assets/buypack-habanero-garlic.png",
-    packImage: "/assets/aaY4kVxvIZEnjQSM_3-pack.png",
+    bg: "#8d5629",
+    image: "/assets/buy-pack-left-walnut-brown.png",
+    packImage: "/assets/bundle-collection-pack.png",
     cover: true,
   },
   {
-    name: "Crushed Cherry Garlic",
+    id: "gift-almond",
+    name: "Gift Collection",
     tone: "toneRed" as const,
-    bg: "#da1e27",
-    image: "/assets/buypack-cherry-garlic.png",
-    packImage: "/assets/aaY4h1xvIZEnjQSH_3-pack-1-.png",
+    bg: "#064a38",
+    image: "/assets/buy-pack-left-dryfruit-green.png",
+    packImage: "/assets/bundle-collection-pack.png",
     cover: true,
   },
 ];
@@ -36,15 +39,29 @@ const packs = [
 export default function BuyPackCarousel() {
   const [index, setIndex] = useState(0);
   const [packSize, setPackSize] = useState<3 | 6>(3);
+  const [transitioning, setTransitioning] = useState(false);
+  const [direction, setDirection] = useState<"next" | "prev">("next");
 
   const active = packs[index];
 
+  function move(nextIndex: number, nextDirection: "next" | "prev") {
+    if (transitioning) return;
+
+    setDirection(nextDirection);
+    setTransitioning(true);
+
+    window.setTimeout(() => {
+      setIndex(nextIndex);
+      window.setTimeout(() => setTransitioning(false), 120);
+    }, 460);
+  }
+
   function prev() {
-    setIndex((i) => (i - 1 + packs.length) % packs.length);
+    move((index - 1 + packs.length) % packs.length, "prev");
   }
 
   function next() {
-    setIndex((i) => (i + 1) % packs.length);
+    move((index + 1) % packs.length, "next");
   }
 
   return (
@@ -56,11 +73,11 @@ export default function BuyPackCarousel() {
         >
           {packs.map((pack) =>
             pack.cover ? (
-              <div key={pack.name} className={styles.buyPackImageSlide} style={{ background: pack.bg }}>
+              <div key={pack.id} className={styles.buyPackImageSlide} style={{ background: pack.bg }}>
                 <Image src={pack.image} alt="" fill sizes="(max-width: 1050px) 100vw, 50vw" className={styles.buyPackImageCover} />
               </div>
             ) : (
-              <div key={pack.name} className={styles.buyPackImageSlide} style={{ background: pack.bg }}>
+              <div key={pack.id} className={styles.buyPackImageSlide} style={{ background: pack.bg }}>
                 <Image src={pack.image} alt="" width={375} height={431} className={styles.buyPackImagePhoto} />
               </div>
             )
@@ -70,8 +87,11 @@ export default function BuyPackCarousel() {
 
       <div className={styles.packPanel}>
         <div className={styles.packPanelHead}>
-          <h2>Buy a pack</h2>
-          <p>Save some bucks</p>
+          <h2>Curated Collections</h2>
+          <p>
+            Discover our thoughtfully assembled gourmet boxes designed for gifting,
+            celebrations and everyday luxury.
+          </p>
           <div className={styles.packToggle}>
             <button
               type="button"
@@ -90,12 +110,16 @@ export default function BuyPackCarousel() {
           </div>
         </div>
 
-        <div className={styles.packCardWrap}>
-          <button type="button" className={styles.buyPackArrowLeft} onClick={prev} aria-label="Previous product">
+        <div
+          className={`${styles.packCardWrap} ${transitioning ? styles.packCardChanging : ""} ${
+            direction === "next" ? styles.packDirectionNext : styles.packDirectionPrev
+          }`}
+        >
+          <button type="button" className={styles.buyPackArrowLeft} onClick={prev} aria-label="Previous product" disabled={transitioning}>
             <ArrowLeft size={20} />
           </button>
 
-          <div className={`${styles.packCard} ${styles[active.tone]}`}>
+          <div className={`${styles.packCard} ${styles[active.tone]}`} key={active.id}>
             <h3>{active.name}</h3>
             <div className={styles.packFaceCanvas} aria-hidden="true">
               <FaceCanvas />
@@ -104,8 +128,8 @@ export default function BuyPackCarousel() {
               <Image
                 src={active.packImage}
                 alt={`${active.name} ${packSize} pack`}
-                width={2560}
-                height={2560}
+                width={1180}
+                height={929}
                 className={styles.packBottleImage}
               />
             </div>
@@ -115,7 +139,7 @@ export default function BuyPackCarousel() {
             </button>
           </div>
 
-          <button type="button" className={styles.buyPackArrowRight} onClick={next} aria-label="Next product">
+          <button type="button" className={styles.buyPackArrowRight} onClick={next} aria-label="Next product" disabled={transitioning}>
             <ArrowRight size={20} />
           </button>
         </div>

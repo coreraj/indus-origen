@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import BrandLogo from "./BrandLogo";
 import styles from "./page.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -147,16 +148,6 @@ function HeroHeading() {
   );
 }
 
-function BrandMark() {
-  return (
-    <div className={styles.brandMark} aria-hidden="true">
-      <span>Indus</span>
-      <strong>Origen</strong>
-      <i />
-    </div>
-  );
-}
-
 function SnackPack({
   product,
   size = "regular",
@@ -166,7 +157,9 @@ function SnackPack({
 }) {
   return (
     <div className={`${styles.pack} ${styles[product.color]} ${styles[size]}`}>
-      <div className={styles.packSeal}>IO</div>
+      <div className={styles.packSeal}>
+        <BrandLogo className={styles.packSealLogo} decorative />
+      </div>
       <div className={styles.packBody}>
         <span>Indus Origen</span>
         <strong>{product.name}</strong>
@@ -362,7 +355,7 @@ export default function Home() {
     <main ref={rootRef} className={styles.page}>
       <header className={`${styles.topbar} ${headerCompact ? styles.headerCompact : ""}`}>
         <a className={styles.logoLink} href="#top" aria-label="Indus Origen home">
-          <BrandMark />
+          <BrandLogo className={styles.brandMark} compact={headerCompact} decorative priority />
         </a>
         <nav className={styles.navLinks} aria-label="Primary navigation">
           <a href="#shop">Shop</a>
@@ -609,7 +602,7 @@ export default function Home() {
 
       <footer id="club" className={styles.footer}>
         <div className={styles.footerBrand} data-reveal>
-          <BrandMark />
+          <BrandLogo className={styles.brandMark} />
         </div>
         <nav className={styles.footerNav} aria-label="Footer navigation" data-reveal>
           <a href="#shop">Shop</a>
