@@ -183,15 +183,17 @@ function SnackPack({
 
 function BottleProduct({ product }: { product: (typeof products)[number] }) {
   return (
-    <div className={styles.bottleWrap} data-float>
-      <Image
-        src="/assets/bucks-bottle.png"
-        alt={product.name}
-        width={405}
-        height={1058}
-        priority
-        className={styles.bottleImage}
-      />
+    <div className={styles.bottleWrap}>
+      <div className={styles.bottleFloat}>
+        <Image
+          src="/assets/bucks-bottle.png"
+          alt={product.name}
+          width={405}
+          height={1058}
+          priority
+          className={styles.bottleImage}
+        />
+      </div>
     </div>
   );
 }
@@ -200,34 +202,35 @@ function NutCharacter({ expression }: { expression: number }) {
   return (
     <div
       className={`${styles.foodCharacter} ${styles[`face${expression}`]}`}
-      data-float
       aria-hidden="true"
     >
-      <Image
-        src="/assets/almond.png"
-        alt=""
-        width={514}
-        height={490}
-        className={styles.characterNutImage}
-      />
-      <div className={styles.smartGlasses}>
-        <span />
-        <span />
-        <i />
+      <div className={styles.characterFloat}>
+        <Image
+          src="/assets/almond.png"
+          alt=""
+          width={514}
+          height={490}
+          className={styles.characterNutImage}
+        />
+        <div className={styles.smartGlasses}>
+          <span />
+          <span />
+          <i />
+        </div>
+        <div className={styles.foodRidgeOne} />
+        <div className={styles.foodRidgeTwo} />
+        <div className={styles.eyeLeft}>
+          <span />
+        </div>
+        <div className={styles.eyeRight}>
+          <span />
+        </div>
+        <div className={styles.browLeft} />
+        <div className={styles.browRight} />
+        <div className={styles.mouth} />
+        <div className={styles.cheekLeft} />
+        <div className={styles.cheekRight} />
       </div>
-      <div className={styles.foodRidgeOne} />
-      <div className={styles.foodRidgeTwo} />
-      <div className={styles.eyeLeft}>
-        <span />
-      </div>
-      <div className={styles.eyeRight}>
-        <span />
-      </div>
-      <div className={styles.browLeft} />
-      <div className={styles.browRight} />
-      <div className={styles.mouth} />
-      <div className={styles.cheekLeft} />
-      <div className={styles.cheekRight} />
     </div>
   );
 }
@@ -236,6 +239,8 @@ export default function Home() {
   const rootRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [faceIndex, setFaceIndex] = useState(0);
+  const [activeProductIndex, setActiveProductIndex] = useState(1);
+  const [headerCompact, setHeaderCompact] = useState(false);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -332,11 +337,30 @@ export default function Home() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const featured = products[1];
+  useEffect(() => {
+    const updateHeader = () => {
+      setHeaderCompact(window.scrollY > 80);
+    };
+
+    updateHeader();
+    window.addEventListener("scroll", updateHeader, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateHeader);
+  }, []);
+
+  const featured = products[activeProductIndex];
+
+  const showPreviousProduct = () => {
+    setActiveProductIndex((index) => (index - 1 + products.length) % products.length);
+  };
+
+  const showNextProduct = () => {
+    setActiveProductIndex((index) => (index + 1) % products.length);
+  };
 
   return (
     <main ref={rootRef} className={styles.page}>
-      <header className={styles.topbar}>
+      <header className={`${styles.topbar} ${headerCompact ? styles.headerCompact : ""}`}>
         <a className={styles.logoLink} href="#top" aria-label="Indus Origen home">
           <BrandMark />
         </a>
@@ -346,11 +370,12 @@ export default function Home() {
           <a href="#origin">About</a>
           <a href="#club">Contact</a>
           <a href="#faq">FAQ</a>
+          <a href="/home2">Home 2</a>
           <a href="#cart">Cart(0)</a>
         </nav>
       </header>
 
-      <div className={styles.cornerActions}>
+      <div className={`${styles.cornerActions} ${headerCompact ? styles.actionsVisible : ""}`}>
         <a href="#shop">Get snacks</a>
         <button aria-label="Open cart">
           <ShoppingBasket size={22} />
@@ -395,40 +420,66 @@ export default function Home() {
         </div>
 
         <div className={styles.heroProduct} data-hero-pack>
-          <div className={styles.heroAntlers} aria-hidden="true">
-            <span />
-            <span />
+          <div className={styles.carouselTopBar} data-top-bar>
+            <div className={styles.barLine} />
+            <p className={styles.productMetaLeft}>
+              <span>Product No. 0</span>
+              <span className={styles.productNumberTicker}>
+                <span>{featured.no.replace("0", "")}</span>
+              </span>
+            </p>
+            <p className={styles.productMetaRight}>
+              <span>{featured.name}</span>
+            </p>
           </div>
-          <div className={styles.productMetaLeft}>Product No. {featured.no}</div>
-          <div className={styles.productMetaRight}>{featured.name}</div>
-          <button className={styles.roundArrow} aria-label="Previous product">
-            <ArrowLeft size={28} />
-          </button>
-          <button className={`${styles.roundArrow} ${styles.nextArrow}`} aria-label="Next product">
-            <ArrowRight size={28} />
-          </button>
-          <div className={styles.heroBlob} />
-          <div className={styles.nutCluster} data-float>
-            <Image
-              src="/assets/peanuts.png"
-              alt=""
-              width={550}
-              height={411}
-              className={styles.peanutImage}
-            />
-            <Image
-              src="/assets/almond.png"
-              alt=""
-              width={514}
-              height={490}
-              className={styles.almondImage}
-            />
+
+          <div className={styles.carouselMiddle} data-middle-stage>
+            <div className={styles.middleLine} />
+            <button
+              className={styles.roundArrow}
+              type="button"
+              aria-label="Previous product"
+              onClick={showPreviousProduct}
+            >
+              <ArrowLeft size={28} />
+            </button>
+            <div className={styles.productScene} key={featured.name}>
+              <div className={styles.heroBlob} />
+              <div className={styles.nutCluster}>
+                <Image
+                  src="/assets/peanuts.png"
+                  alt=""
+                  width={550}
+                  height={411}
+                  className={styles.peanutImage}
+                />
+                <Image
+                  src="/assets/almond.png"
+                  alt=""
+                  width={514}
+                  height={490}
+                  className={styles.almondImage}
+                />
+              </div>
+              <BottleProduct product={featured} />
+              <NutCharacter expression={faceIndex} />
+            </div>
+            <button
+              className={`${styles.roundArrow} ${styles.nextArrow}`}
+              type="button"
+              aria-label="Next product"
+              onClick={showNextProduct}
+            >
+              <ArrowRight size={28} />
+            </button>
           </div>
-          <BottleProduct product={featured} />
-          <NutCharacter expression={faceIndex} />
-          <a className={styles.shopNow} href="#shop">
-            Shop now
-          </a>
+
+          <div className={styles.carouselBottomBar} data-bottom-bar>
+            <div className={styles.barLine} />
+            <a className={styles.shopNow} href="#shop">
+              <span>Shop now</span>
+            </a>
+          </div>
         </div>
       </section>
 
